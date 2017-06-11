@@ -24,7 +24,7 @@ export default class SpaceInvaders {
     }
 
     addElement( Element ) {
-        this.elements.push( new Element( this.ctx ) );
+        this.elements.push( new Element( this ) );
     }
 
     renderElements() {

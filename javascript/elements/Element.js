@@ -1,5 +1,5 @@
 export default class Element {
-    constructor( ctx ) {
-        this.ctx = ctx;
+    constructor( root ) {
+        this.ctx = root.ctx;
     }
 }
