@@ -17,7 +17,7 @@ export default class Tests extends Element {
     }
 
     render() {
-        this.playerSprite.draw( this.ctx );
+        this.playerSprite.drawAt( this.ctx, 0, 0 );
         this.alienLowSprite.drawAt( this.ctx, 30, 0 );
         this.alienMiddleSprite.drawAt( this.ctx, 60, 0 );
         this.alienHighSprite.drawAt( this.ctx, 90, 0 );

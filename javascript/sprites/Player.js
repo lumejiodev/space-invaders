@@ -1,8 +1,10 @@
 import { Sprite } from './Sprite';
+import { PlayerColor } from '../constants/Colors';
 
 export default class PlayerSprite extends Sprite {
     width = 26;
     height = 16;
+    color = PlayerColor;
 
     draw( ctx ) {
         ctx .fR( 0, 8, 26, 8 )
