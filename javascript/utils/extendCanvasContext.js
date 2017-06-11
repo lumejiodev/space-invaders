@@ -4,47 +4,58 @@ const CanvasContextProto = CanvasRenderingContext2D.prototype;
 
 CanvasContextProto.clearCanvas = function(){
     let { width, height } = this.canvas;
-    return this.clearRect( 0, 0, width, height ) && this;
+    this.clearRect( 0, 0, width, height );
+    return this;
 };
 
 CanvasContextProto.R = function( x, y, w = 1, h = 1 ) {
-    return this.rect( x, y, w, h ) && this;
+    this.rect( x, y, w, h );
+    return this;
 };
 
 CanvasContextProto.fR = function( x, y, w = 1, h = 1 ) {
-    return this.fillRect( x, y, w, h ) && this;
+    this.fillRect( x, y, w, h );
+    return this;
 };
 
 CanvasContextProto.cR = function( x, y, w = 1, h = 1 ) {
-    return this.clearRect( x, y, w, h ) && this;
+    this.clearRect( x, y, w, h );
+    return this;
 };
 
 CanvasContextProto.move = function( x, y ) {
-    return this.moveTo( x, y ) && this;
+    this.moveTo( x, y );
+    return this;
 };
 
 CanvasContextProto.line = function( x, y ) {
-    return this.lineTo( x, y ) && this;
+    this.lineTo( x, y );
+    return this;
 };
 
 CanvasContextProto.trans = function( x, y ) {
-    return this.translate( x, y ) && this;
+    this.translate( x, y );
+    return this;
 };
 
 CanvasContextProto.bezier = function( x1, y1, x2, y2, x, y ) {
-    return this.bezierCurveTo( x1, y1, x2, y2, x, y ) && this;
+    this.bezierCurveTo( x1, y1, x2, y2, x, y );
+    return this;
 };
 
 CanvasContextProto.begin = function(){
-    return this.beginPath() && this;
+    this.beginPath();
+    return this;
 };
 
 CanvasContextProto.close = function(){
-    return this.closePath() && this;
+    this.closePath();
+    return this;
 };
 
 CanvasContextProto.style = function( color = 'black', type = 'fill' ) {
-    return (this[ type + 'Style'] = color) && this;
+    this[ type + 'Style'] = color;
+    return this;
 };
 
 CanvasContextProto.drawArc = function( x, y, r, fill ) {
@@ -54,7 +65,8 @@ CanvasContextProto.drawArc = function( x, y, r, fill ) {
 };
 
 CanvasContextProto.text = function( text, x, y ) {
-    return this.fillText( text, x, y ) && this;
+    this.fillText( text, x, y );
+    return this;
 };
 
 CanvasContextProto.imageSmooth = function( value = false ){
