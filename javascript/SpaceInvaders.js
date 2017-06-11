@@ -1,4 +1,4 @@
-import { CanvasWidth, CanvasHeight } from './constants/CanvasSizes';
+import { CanvasWidth, CanvasHeight } from './constants/Sizes';
 import requestAnimationFrame from './utils/requestAnimationFrame';
 
 import Background from './elements/Background';
