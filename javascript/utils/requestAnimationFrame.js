@@ -15,4 +15,5 @@ function polyfill() {
     };
 }
 
-export default window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || polyfill;
+const requestAnimationFrame =  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || polyfill;
+export default requestAnimationFrame;
