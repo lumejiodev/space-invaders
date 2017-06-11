@@ -8,17 +8,21 @@ export default class SpaceInvaders {
 
     constructor( canvas ) {
         this.canvas = canvas;
+        this.initCanvasSizes();
+        this.initGame();
+    }
+
+    initCanvasSizes() {
         this.setCanvasSizes();
-        this.init();
+        window.addEventListener( 'resize', ::this.setCanvasSizes );
     }
 
     setCanvasSizes() {
-        this.canvas.width = CanvasWidth;
-        this.canvas.height = CanvasHeight;
+        this.canvas.setDimensions( CanvasWidth, CanvasHeight, false, true );
         this.ctx = this.canvas.getContext('2d');
     }
 
-    init() {
+    initGame() {
         this.addElement( Background );
         requestAnimationFrame( this.renderFrame );
     }
