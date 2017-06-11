@@ -2,6 +2,7 @@ import { CanvasWidth, CanvasHeight } from './constants/Sizes';
 import requestAnimationFrame from './utils/requestAnimationFrame';
 
 import Background from './elements/Background';
+import Tests from './elements/Tests';
 
 export default class SpaceInvaders {
     elements = [];
@@ -24,6 +25,7 @@ export default class SpaceInvaders {
 
     initGame() {
         this.addElement( Background );
+        this.addElement( Tests );
         requestAnimationFrame( this.renderFrame );
     }
 
