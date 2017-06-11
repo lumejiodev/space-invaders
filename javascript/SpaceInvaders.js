@@ -36,7 +36,7 @@ export default class SpaceInvaders {
     }
 
     renderFrame = () => {
-        this.ctx.clearRect( 0, 0, CanvasWidth, CanvasHeight );
+        this.ctx.clearCanvas();
         this.renderElements();
         requestAnimationFrame( this.renderFrame );
     };

@@ -3,8 +3,7 @@ import { BackgroundColor } from '../constants/Colors';
 
 export default class Background extends Element {
     render() {
-        let { canvas } = this.ctx;
-        this.ctx.fillStyle = BackgroundColor;
-        this.ctx.fillRect( 0, 0, canvas.width, canvas.height );
+        let { width, height } = this.ctx.canvas;
+        this.ctx.style( BackgroundColor ).fR( 0, 0, width, height );
     }
 }
