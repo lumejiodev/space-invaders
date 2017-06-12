@@ -8,7 +8,8 @@ export default class Player extends Element {
         super( ...args );
 
         this.pos = 0.5; // положение от 0 до 1
-        this.step = 0.03;
+        this.step = 0.01;
+        this.stepInterval = 16;
         this.maxPos = FieldWidth - this.spriteWidth;
 
         this.initUserControl();
@@ -22,18 +23,30 @@ export default class Player extends Element {
 
     initUserControl() {
         // todo Вынести обработку пользовательских действий в отдельный класс
+        this.moveTimer = null;
+        this.moveDirection = false;
         window.addEventListener( 'keydown', e => {
-            switch (e.keyCode) {
-                case KeyLeft:
-                    this.pos += -this.step;
-                    break;
-                case KeyRight:
-                    this.pos += this.step;
-                    break;
-                default:
+            if (e.keyCode === KeyLeft || e.keyCode === KeyRight) {
+                if (e.keyCode !== this.moveDirection) {
+                    clearTimeout( this.moveTimer );
+                    this.moveDirection = e.keyCode;
+                    this.positionStep();
+                }
             }
-            this.pos = Math.max( 0, Math.min( 1, this.pos ));
         });
+        window.addEventListener( 'keyup', e => {
+            if (e.keyCode === this.moveDirection) {
+                this.moveDirection = false;
+            }
+        });
+    }
+
+    positionStep() {
+        if (this.moveDirection === false) return;
+
+        let step = this.moveDirection === KeyLeft ? -this.step : this.step;
+        this.pos = Math.max( 0, Math.min( 1, this.pos + step ));
+        this.moveTimer = setTimeout( ::this.positionStep, this.stepInterval );
     }
 
     get position() {
