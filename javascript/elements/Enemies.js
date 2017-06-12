@@ -33,7 +33,7 @@ export default class Enemies extends Element {
         this.directionRight = !this.directionRight;
     }
 
-    get horzPosition() {
+    updatePosition() {
         const timestamp = Date.now();
         const timeSpend = timestamp - this.moveTimestamp;
         this.moveTimestamp = timestamp;
@@ -46,7 +46,9 @@ export default class Enemies extends Element {
             this.position = 0;
             this.levelUp();
         }
+    }
 
+    get horzPosition() {
         return this.position + FrameWidth;
     }
 
@@ -55,6 +57,7 @@ export default class Enemies extends Element {
     }
 
     render() {
+        this.updatePosition();
         let [ baseX, baseY ] = [ this.horzPosition, this.vertPosition ];
         for (let i = 0; i < this.COLUMNS; i++) {
             for (let j = 0; j < this.ROWS; j++) {
