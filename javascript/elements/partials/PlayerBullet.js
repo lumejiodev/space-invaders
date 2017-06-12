@@ -5,21 +5,26 @@ export default function PlayerBullet( position, topAnchor ) {
     const topPosition = topAnchor - PlayerBulletHeight;
     const fireTime = Date.now();
 
+    this.positionX = position;
+    this.positionY = topPosition;
+
     this.getRelativePosition = function() {
         return (Date.now() - fireTime) / this.speed;
     };
 
-    this.render = function() {
+    this.updatePosition = function() {
         const relativePosition = this.getRelativePosition();
         if (relativePosition > 1) {
             this.alive = false;
         } else {
-            let vertPosition = (topPosition + PlayerBulletHeight) * (1 - relativePosition) - PlayerBulletHeight;
-            this.ctx
-                .style( PlayerBulletColor )
-                .fR( position, vertPosition, PlayerBulletWidth, PlayerBulletHeight );
+            this.positionY = (topPosition + PlayerBulletHeight) * (1 - relativePosition) - PlayerBulletHeight;
         }
+    };
 
+    this.render = function() {
+        this.ctx
+            .style( PlayerBulletColor )
+            .fR( position, this.positionY, PlayerBulletWidth, PlayerBulletHeight );
     };
 }
 

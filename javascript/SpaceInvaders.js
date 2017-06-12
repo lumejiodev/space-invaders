@@ -38,12 +38,17 @@ export default class SpaceInvaders {
         this.elements.push( new Element( this ) );
     }
 
+    updatePositions() {
+        this.elements.forEach( item => item.update() );
+    }
+
     renderElements() {
         this.elements.forEach( item => item.render() );
     }
 
     renderFrame = () => {
         this.ctx.clearCanvas();
+        this.updatePositions();
         this.renderElements();
         requestAnimationFrame( this.renderFrame );
     };

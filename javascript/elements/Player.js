@@ -68,6 +68,12 @@ export default class Player extends Element {
         return PlayerTopPosition - this.spriteHeight;
     }
 
+    update() {
+        if (this.bullet && this.bullet.alive) {
+            this.bullet.updatePosition();
+        }
+    }
+
     render() {
         this.sprite.renderAt( this.position, this.topPosition );
 

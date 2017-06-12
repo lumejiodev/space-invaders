@@ -56,8 +56,11 @@ export default class Enemies extends Element {
         return AlienStartPosition + this.level;
     }
 
-    render() {
+    update() {
         this.updatePosition();
+    }
+
+    render() {
         let [ baseX, baseY ] = [ this.horzPosition, this.vertPosition ];
         for (let i = 0; i < this.COLUMNS; i++) {
             for (let j = 0; j < this.ROWS; j++) {
