@@ -6,6 +6,8 @@ import { AlienWidth, AlienHeight } from '../../constants/Sizes';
 class Alien { // Abstract
     constructor( ctx ) {
         this.ctx = ctx;
+        this.positionX = 0;
+        this.positionY = 0;
         this.spriteClass = function(){};
     }
 
@@ -13,8 +15,13 @@ class Alien { // Abstract
         this.sprite = new spriteClass( this.ctx, AlienWidth, AlienHeight );
     }
 
-    render( x, y ) {
-        this.sprite.fitRenderAt( x, y );
+    setPosition( x, y ) {
+        this.positionX = x;
+        this.positionY = y;
+    }
+
+    render() {
+        this.sprite.fitRenderAt( this.positionX, this.positionY );
     }
 }
 

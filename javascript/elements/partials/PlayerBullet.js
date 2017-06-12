@@ -8,6 +8,10 @@ export default function PlayerBullet( position, topAnchor ) {
     this.positionX = position;
     this.positionY = topPosition;
 
+    this.destroy = function() {
+        this.alive = false;
+    };
+
     this.getRelativePosition = function() {
         return (Date.now() - fireTime) / this.speed;
     };

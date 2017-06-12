@@ -69,8 +69,12 @@ export default class Player extends Element {
     }
 
     update() {
-        if (this.bullet && this.bullet.alive) {
-            this.bullet.updatePosition();
+        const { root, bullet } = this;
+        if (bullet && bullet.alive) {
+            bullet.updatePosition();
+            if (bullet.alive) root.playerBullet = bullet; // выношу в рут, чтобы потом сравнивать в Enemies
+        } else {
+            root.playerBullet = null;
         }
     }
 
