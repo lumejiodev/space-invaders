@@ -22,6 +22,7 @@ export default class SpaceInvaders {
     setCanvasSizes() {
         this.canvas.setDimensions( CanvasWidth, CanvasHeight, false, true );
         this.ctx = this.canvas.getContext('2d');
+        this.ctx.imageSmooth( false );
     }
 
     initGame() {

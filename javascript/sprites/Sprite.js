@@ -1,12 +1,15 @@
 const SpriteBuffer = {}; // static
 
 export class Sprite { // Abstract
-    constructor( ctx ) {
-        this.ctx    = ctx;
+    constructor( ctx, renderWidth, renderHeight ) {
         this.id     = 'Sprite';
         this.width  = 0;
         this.height = 0;
         this.color  = 'black';
+
+        this.ctx = ctx;
+        this.renderWidth = renderWidth;
+        this.renderHeight = renderHeight;
     }
 
     afterProps() {
@@ -32,7 +35,7 @@ export class Sprite { // Abstract
 
     renderAt( x, y ) {
         const img = SpriteBuffer[ this.id ][0];
-        this.ctx.drawImage( img, x, y );
+        this.ctx.drawImage( img, x, y, this.renderWidth, this.renderHeight );
     }
 }
 
