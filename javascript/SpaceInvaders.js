@@ -4,7 +4,6 @@ import requestAnimationFrame from './utils/requestAnimationFrame';
 import Background from './elements/Background';
 import Player from './elements/Player';
 import Enemies from './elements/Enemies';
-import Tests from './elements/Tests';
 
 export default class SpaceInvaders {
     elements = [];
@@ -30,7 +29,6 @@ export default class SpaceInvaders {
         this.addElement( Background );
         this.addElement( Player );
         this.addElement( Enemies );
-        this.addElement( Tests );
         requestAnimationFrame( this.renderFrame );
     }
 
