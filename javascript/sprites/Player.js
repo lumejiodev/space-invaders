@@ -2,9 +2,16 @@ import { Sprite } from './Sprite';
 import { PlayerColor } from '../constants/Colors';
 
 export default class PlayerSprite extends Sprite {
-    width = 26;
-    height = 16;
-    color = PlayerColor;
+    constructor( ...args ) {
+        super( ...args );
+
+        this.id     = 'PlayerSprite';
+        this.width  = 26;
+        this.height = 16;
+        this.color  = PlayerColor;
+
+        this.afterProps();
+    }
 
     draw( ctx ) {
         ctx .fR( 0, 8, 26, 8 )
