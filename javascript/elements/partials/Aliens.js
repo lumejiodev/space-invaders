@@ -6,6 +6,7 @@ import { AlienWidth, AlienHeight } from '../../constants/Sizes';
 class Alien { // Abstract
     constructor( ctx ) {
         this.ctx = ctx;
+        this.alive = true;
         this.positionX = 0;
         this.positionY = 0;
         this.spriteClass = function(){};
@@ -16,12 +17,23 @@ class Alien { // Abstract
     }
 
     setPosition( x, y ) {
-        this.positionX = x;
-        this.positionY = y;
+        if (this.alive) {
+            this.positionX = x;
+            this.positionY = y;
+        }
+    }
+
+    destroy( callback ) {
+        this.alive = false;
+        setTimeout( callback, 500 );
     }
 
     render() {
-        this.sprite.fitRenderAt( this.positionX, this.positionY );
+        if (this.alive) {
+            this.sprite.fitRenderAt( this.positionX, this.positionY );
+        } else {
+            this.ctx.style('red').fR( this.positionX, this.positionY, AlienWidth, AlienHeight );
+        }
     }
 }
 
