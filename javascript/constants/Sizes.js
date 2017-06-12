@@ -10,3 +10,6 @@ export const BorderTopPosition = Math.round( CanvasHeight - BorderOffset );
 
 export const PlayerOffset = BorderOffset + BorderWidth + 5;
 export const PlayerTopPosition = Math.round( CanvasHeight - PlayerOffset );
+
+export const PlayerBulletWidth = 2;
+export const PlayerBulletHeight = 14;
