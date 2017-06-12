@@ -2,7 +2,7 @@ import Element from './Element';
 import AlienLowSprite from '../sprites/AlienLow';
 import AlienMiddleSprite from '../sprites/AlienMiddle';
 import AlienHighSprite from '../sprites/AlienHigh';
-import { FrameWidth, FieldWidth, AlienSize, AlienOffset, AlienStartPosition } from '../constants/Sizes';
+import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition } from '../constants/Sizes';
 
 export default class Enemies extends Element {
     constructor( root ) {
@@ -16,11 +16,11 @@ export default class Enemies extends Element {
             this.aliens[i] = [];
             for (let j = 0; j < this.ROWS; j++) {
                 let AlienType = j == 0 ? AlienHigh : j < 3 ? AlienMiddle : AlienLow;
-                this.aliens[i].push( new AlienType( this.ctx, AlienSize ) );
+                this.aliens[i].push( new AlienType( this.ctx ) );
             }
         }
 
-        let rowWidth = this.COLUMNS * (AlienSize + AlienOffset) - AlienOffset;
+        let rowWidth = this.COLUMNS * (AlienWidth + AlienOffset) - AlienOffset;
         this.position = (FieldWidth - rowWidth) / 2;
     }
 
@@ -29,28 +29,26 @@ export default class Enemies extends Element {
     }
 
     render() {
-        const AlienSpace = AlienSize + AlienOffset;
         for (let i = 0; i < this.COLUMNS; i++) {
             for (let j = 0; j < this.ROWS; j++) {
-                this.aliens[i][j].render( this.totalPosition + i*AlienSpace, AlienStartPosition + j*AlienSpace );
+                this.aliens[i][j].render( this.totalPosition + i*(AlienWidth + AlienOffset), AlienStartPosition + j*(AlienHeight + AlienOffset) );
             }
         }
     }
 }
 
 class Alien {
-    constructor( ctx, size ) {
+    constructor( ctx ) {
         this.ctx = ctx;
-        this.size = size;
         this.spriteClass = function(){};
     }
 
     attachSprite( spriteClass ) {
-        this.sprite = new spriteClass( this.ctx, this.size, this.size );
+        this.sprite = new spriteClass( this.ctx, AlienWidth, AlienHeight );
     }
 
     render( x, y ) {
-        this.sprite.renderAt( x, y );
+        this.sprite.fitRenderAt( x, y );
     }
 }
 

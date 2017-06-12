@@ -37,19 +37,29 @@ export class Sprite { // Abstract
 
     draw( ctx ) {}
 
+    get img() {
+        return SpriteBuffer[ this.id ][0];
+    }
+
     renderAt( x, y ) {
-        const img = SpriteBuffer[ this.id ][0];
-        this.ctx.drawImage( img, x, y, this.renderWidth, this.renderHeight );
+        this.ctx.drawImage( this.img, x, y, this.renderWidth, this.renderHeight );
+    }
+
+    fitRenderAt( x, y ) {
+        let result = { x, y, width: this.renderWidth, height: this.renderHeight };
+        if (this.width/this.height > this.renderWidth/this.renderHeight) {
+            result.height = (this.renderWidth / this.width) * this.height;
+            result.y += this.renderHeight - result.height;
+        } else {
+            result.width = (this.renderHeight / this.height) * this.width;
+            result.x += (this.renderWidth - result.width) / 2;
+        }
+        this.ctx.drawImage( this.img, result.x, result.y, result.width, result.height );
     }
 }
 
 export class StatefulSprite extends Sprite {
     stateTick = 1000; // ms
-
-    getState() {
-        let state = Math.floor( Date.now() % (this.stateTick * 2) / this.stateTick );
-        return state === 2 ? 1 : state;
-    }
 
     fillBuffer() {
         SpriteBuffer[ this.id ] = [];
@@ -60,8 +70,12 @@ export class StatefulSprite extends Sprite {
         });
     }
 
-    renderAt( x, y ) {
-        const img = SpriteBuffer[ this.id ][ this.getState() ];
-        this.ctx.drawImage( img, x, y, this.renderWidth, this.renderHeight );
+    get state() {
+        let state = Math.floor( Date.now() % (this.stateTick * 2) / this.stateTick );
+        return state === 2 ? 1 : state;
+    }
+
+    get img() {
+        return SpriteBuffer[ this.id ][ this.state ];
     }
 }

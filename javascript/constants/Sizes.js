@@ -14,6 +14,7 @@ export const PlayerTopPosition = Math.round( CanvasHeight - PlayerOffset );
 export const PlayerBulletWidth = 2;
 export const PlayerBulletHeight = 14;
 
-export const AlienSize = 32;
+export const AlienWidth = 36;
+export const AlienHeight = 24;
 export const AlienOffset = 16;
 export const AlienStartPosition = 60;
