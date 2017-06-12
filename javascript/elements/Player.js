@@ -1,5 +1,6 @@
 import Element from './Element';
 import PlayerSprite from '../sprites/Player';
+import { PlayerTopPosition } from '../constants/Sizes';
 
 export default class Player extends Element {
     attachSprite() {
@@ -9,6 +10,6 @@ export default class Player extends Element {
     }
 
     render() {
-        this.sprite.renderAt( 50, 50 );
+        this.sprite.renderAt( 50, PlayerTopPosition - this.spriteHeight );
     }
 }

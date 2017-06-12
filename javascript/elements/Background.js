@@ -7,6 +7,6 @@ export default class Background extends Element {
         let { width, height } = this.ctx.canvas;
         this.ctx
             .style( BackgroundColor ).fR( 0, 0, width, height )
-            .style( PlayerColor ).fR( 0, CanvasHeight - BorderOffset, width, -BorderWidth );
+            .style( PlayerColor ).fR( 0, Math.round( CanvasHeight - BorderOffset ), width, -BorderWidth );
     }
 }
