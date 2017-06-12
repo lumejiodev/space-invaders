@@ -18,18 +18,50 @@ export default class Enemies extends Element {
             }
         }
 
-        let rowWidth = this.COLUMNS * (AlienWidth + AlienOffset) - AlienOffset;
-        this.position = (FieldWidth - rowWidth) / 2;
+        this.rowWidth = this.COLUMNS * (AlienWidth + AlienOffset) - AlienOffset;
+
+        this.position = (FieldWidth - this.rowWidth) / 2;
+        this.level = 0;
+        this.speed = 20/1000;
+        this.directionRight = true;
+        this.moveTimestamp = Date.now();
     }
 
-    get totalPosition() {
+    levelUp() {
+        this.level += AlienHeight * 0.7;
+        this.speed += 20/1000;
+        this.directionRight = !this.directionRight;
+    }
+
+    get horzPosition() {
+        const timestamp = Date.now();
+        const timeSpend = timestamp - this.moveTimestamp;
+        this.moveTimestamp = timestamp;
+        this.position += timeSpend * (this.directionRight ? this.speed : -this.speed);
+
+        if (this.position + this.rowWidth > FieldWidth) {
+            this.position = FieldWidth - this.rowWidth;
+            this.levelUp();
+        } else if (this.position < 0) {
+            this.position = 0;
+            this.levelUp();
+        }
+
         return this.position + FrameWidth;
     }
 
+    get vertPosition() {
+        return AlienStartPosition + this.level;
+    }
+
     render() {
+        let [ baseX, baseY ] = [ this.horzPosition, this.vertPosition ];
         for (let i = 0; i < this.COLUMNS; i++) {
             for (let j = 0; j < this.ROWS; j++) {
-                this.aliens[i][j].render( this.totalPosition + i*(AlienWidth + AlienOffset), AlienStartPosition + j*(AlienHeight + AlienOffset) );
+                this.aliens[i][j].render(
+                    baseX + i*(AlienWidth + AlienOffset),
+                    baseY + j*(AlienHeight + AlienOffset)
+                );
             }
         }
     }
