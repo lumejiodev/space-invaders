@@ -1,10 +1,22 @@
 import { StatefulSprite } from './Sprite';
 import { AlienColor } from '../constants/Colors';
 
-export default class AlienLow extends StatefulSprite {
-    width = 24;
-    height = 16;
-    color = AlienColor;
+export default class AlienLowSprite extends StatefulSprite {
+    constructor( ...args ) {
+        super( ...args );
+
+        this.id     = 'AlienLowSprite';
+        this.width  = 24;
+        this.height = 16;
+        this.color  = AlienColor;
+
+        this.states = [
+            ctx => this.drawState( ctx, 1 ),
+            ctx => this.drawState( ctx, 2 )
+        ];
+
+        this.afterProps();
+    }
 
     drawState( ctx, state ) {
         ctx .fR( 8, 0, 8, 2 )

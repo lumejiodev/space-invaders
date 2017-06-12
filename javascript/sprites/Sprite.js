@@ -14,8 +14,14 @@ export class Sprite { // Abstract
 
     afterProps() {
         if (this.id in SpriteBuffer === false) {
-            this.createBuffer();
+            this.fillBuffer();
         }
+    }
+
+    fillBuffer() {
+        let buffer = this.createBuffer();
+        this.draw( buffer.ctx );
+        SpriteBuffer[ this.id ] = [ buffer.canvas ];
     }
 
     createBuffer() {
@@ -26,9 +32,7 @@ export class Sprite { // Abstract
         let bufferCtx = buffer.getContext('2d');
             bufferCtx.style( this.color );
 
-        this.draw( bufferCtx );
-
-        SpriteBuffer[ this.id ] = [ buffer ];
+        return { canvas: buffer, ctx: bufferCtx };
     }
 
     draw( ctx ) {}
@@ -40,16 +44,24 @@ export class Sprite { // Abstract
 }
 
 export class StatefulSprite extends Sprite {
-    stateTick = 700; // ms
+    stateTick = 1000; // ms
 
     getState() {
-        let state = Math.ceil( Date.now() % (this.stateTick * 2) / this.stateTick );
-        return state === 0 ? 1 : state;
+        let state = Math.floor( Date.now() % (this.stateTick * 2) / this.stateTick );
+        return state === 2 ? 1 : state;
     }
 
-    draw( ctx ) {
-        this.drawState( ctx, this.getState() );
+    fillBuffer() {
+        SpriteBuffer[ this.id ] = [];
+        this.states.forEach( drawState => {
+            let buffer = this.createBuffer();
+            drawState( buffer.ctx );
+            SpriteBuffer[ this.id ].push( buffer.canvas );
+        });
     }
 
-    drawState( ctx, state ) {}
+    renderAt( x, y ) {
+        const img = SpriteBuffer[ this.id ][ this.getState() ];
+        this.ctx.drawImage( img, x, y, this.renderWidth, this.renderHeight );
+    }
 }

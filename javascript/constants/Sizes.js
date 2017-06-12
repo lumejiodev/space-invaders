@@ -15,5 +15,5 @@ export const PlayerBulletWidth = 2;
 export const PlayerBulletHeight = 14;
 
 export const AlienSize = 32;
-export const AlienOffset = 14;
+export const AlienOffset = 16;
 export const AlienStartPosition = 60;
