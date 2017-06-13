@@ -22,3 +22,6 @@ export const AlienStartPosition = 60;
 export const AlienSpecialWidth = 48;
 export const AlienSpecialHeight = 21;
 export const AlienSpecialPosition = 20;
+
+export const AlienBulletWidth = 4;
+export const AlienBulletHeight = 15;

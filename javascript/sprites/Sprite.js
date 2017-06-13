@@ -13,6 +13,12 @@ export class Sprite { // Abstract
     }
 
     afterProps() {
+        if (!this.renderWidth) {
+            this.renderWidth = this.width;
+        }
+        if (!this.renderHeight) {
+            this.renderHeight = this.height;
+        }
         if (this.id in SpriteBuffer === false) {
             this.fillBuffer();
         }

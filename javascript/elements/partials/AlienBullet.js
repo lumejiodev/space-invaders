@@ -1,3 +1,6 @@
+import AlienBulletSprite from '../../sprites/AlienBullet';
+import { AlienBulletWidth, AlienBulletHeight } from '../../constants/Sizes';
+
 export default class AlienBullet {
     constructor( ctx, x, y, speed ) {
         this.ctx = ctx;
@@ -6,9 +9,11 @@ export default class AlienBullet {
         this.speed = speed;
 
         this.alive = true;
+        this.sprite = new AlienBulletSprite( ctx, AlienBulletWidth, AlienBulletHeight );
+        this.sprite.stateTick = 300;
     }
 
     render() {
-        this.ctx.style('white').fR( this.positionX, this.positionY, 2, 7 );
+        this.sprite.renderAt( this.positionX, this.positionY );
     }
 }

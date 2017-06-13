@@ -1,7 +1,7 @@
 import Element from './Element';
 import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
 import AlienBullet from './partials/AlienBullet';
-import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition } from '../constants/Sizes';
+import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth } from '../constants/Sizes';
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
 export default class Enemies extends Element {
@@ -140,7 +140,7 @@ export default class Enemies extends Element {
                 return tryColumn();
             })();
 
-            let bulletX = baseX + chosenAlien.column*spaceWidth + AlienWidth/2;
+            let bulletX = Math.round( baseX + chosenAlien.column*spaceWidth + AlienWidth/2 - AlienBulletWidth/2 );
             let bulletY = baseY + chosenAlien.row*spaceHeight + AlienHeight;
             this.alienBullets.push( new AlienBullet( this.ctx, bulletX, bulletY, this.speed*2 ) );
         }
