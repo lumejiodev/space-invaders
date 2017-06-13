@@ -1,5 +1,6 @@
 import Element from './Element';
 import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
+import AlienBullet from './partials/AlienBullet';
 import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition } from '../constants/Sizes';
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
@@ -24,6 +25,8 @@ export default class Enemies extends Element {
                 this.aliens[i].push( new AlienType( this.ctx ) );
             }
         }
+
+        this.alienBullets = [];
 
         this.alienSpecial = {
             alien: new AlienSpecial( this.ctx ),
@@ -94,6 +97,12 @@ export default class Enemies extends Element {
                 special.stopFly();
             }
         }
+
+        this.alienBullets.forEach( bullet => {
+            if (bullet && bullet.alive) {
+                bullet.positionY += timeSpend * bullet.speed;
+            }
+        });
     }
 
     updateAliens() {
@@ -111,6 +120,29 @@ export default class Enemies extends Element {
         const special = this.alienSpecial;
         if (special.exists && special.alien.alive) {
             special.alien.setPosition( special.position, AlienSpecialPosition );
+        }
+
+        // в каждый момент времени создаём некоторую вероятность что какой-то из инопланетяшек пульнёт
+        if (Math.random() < 0.008) { // при 60fps это примерно 28 выстрелов в минуту
+
+            let { COLUMNS, aliens } = this;
+            let chosenAlien = (function tryColumn() {
+                let column = Math.floor( Math.random() * COLUMNS );
+                if (aliens[column].length === 0) return tryColumn();
+
+                let row = aliens.length - 1;
+                for (; row >= 0; row--) {
+                    if (aliens[column][row] && aliens[column][row].alive) {
+                        return { column, row };
+                    }
+                }
+
+                return tryColumn();
+            })();
+
+            let bulletX = baseX + chosenAlien.column*spaceWidth + AlienWidth/2;
+            let bulletY = baseY + chosenAlien.row*spaceHeight + AlienHeight;
+            this.alienBullets.push( new AlienBullet( this.ctx, bulletX, bulletY, this.speed*2 ) );
         }
     }
 
@@ -228,5 +260,11 @@ export default class Enemies extends Element {
         if (this.alienSpecial.exists) {
             this.alienSpecial.alien.render();
         }
+
+        this.alienBullets.forEach( bullet => {
+            if (bullet && bullet.alive) {
+                bullet.render();
+            }
+        });
     }
 }
