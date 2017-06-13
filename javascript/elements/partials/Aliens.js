@@ -2,7 +2,9 @@ import AlienLowSprite from '../../sprites/AlienLow';
 import AlienMiddleSprite from '../../sprites/AlienMiddle';
 import AlienHighSprite from '../../sprites/AlienHigh';
 import AlienSpecialSprite from '../../sprites/AlienSpecial';
+import { easeOutCirc } from '../../utils/easings';
 import { AlienWidth, AlienHeight, AlienSpecialWidth, AlienSpecialHeight } from '../../constants/Sizes';
+import { AlienDyingTime } from '../../constants/Time';
 
 class Alien { // Abstract
     constructor( ctx ) {
@@ -26,14 +28,21 @@ class Alien { // Abstract
 
     destroy( callback ) {
         this.alive = false;
-        setTimeout( callback, 500 );
+        this.dyingStamp = Date.now();
+        setTimeout( callback, AlienDyingTime );
     }
 
     render() {
         if (this.alive) {
             this.sprite.fitRenderAt( this.positionX, this.positionY );
         } else {
-            this.ctx.style('red').fR( this.positionX, this.positionY, AlienWidth, AlienHeight );
+            let pos = (Date.now() - this.dyingStamp) / AlienDyingTime;
+            if (pos < 1) {
+                this.ctx.save();
+                this.ctx.globalAlpha = 1 - pos;
+                this.sprite.fitRenderAt( this.positionX, easeOutCirc( pos, this.positionY, -20, 1 ) );
+                this.ctx.restore();
+            }
         }
     }
 }
