@@ -41,12 +41,16 @@ export default class Enemies extends Element {
             },
             startFly() {
                 this.exists = true;
+                this.alien.alive = true;
                 this.directionRight = Math.random() > 0.5;
                 this.position = this.directionRight ? -AlienSpecialWidth : FieldWidth;
             },
             stopFly() {
                 this.exists = false;
                 this.queueFly();
+            },
+            destroy() {
+                this.alien.destroy( () => this.stopFly() );
             }
         };
         this.alienSpecial.queueFly();
@@ -144,6 +148,19 @@ export default class Enemies extends Element {
 
         let bulletX = bullet.positionX,
             bulletY = bullet.positionY;
+
+        // детекция попадание в специального инопланетянина
+        const special = this.alienSpecial;
+        if (special.exists && special.alien.alive) {
+            if (bulletY < AlienSpecialPosition + AlienSpecialHeight &&
+                bulletY > AlienSpecialPosition &&
+                bulletX < special.position + AlienSpecialWidth &&
+                bulletX > special.position) {
+                special.destroy();
+                bullet.destroy();
+                return;
+            }
+        }
 
         // грубые прикидки
         if (bulletX < this.position ||
