@@ -18,3 +18,7 @@ export const AlienWidth = 36;
 export const AlienHeight = 24;
 export const AlienOffset = 16;
 export const AlienStartPosition = 60;
+
+export const AlienSpecialWidth = 48;
+export const AlienSpecialHeight = 21;
+export const AlienSpecialPosition = 20;

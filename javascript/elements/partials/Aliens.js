@@ -1,7 +1,8 @@
 import AlienLowSprite from '../../sprites/AlienLow';
 import AlienMiddleSprite from '../../sprites/AlienMiddle';
 import AlienHighSprite from '../../sprites/AlienHigh';
-import { AlienWidth, AlienHeight } from '../../constants/Sizes';
+import AlienSpecialSprite from '../../sprites/AlienSpecial';
+import { AlienWidth, AlienHeight, AlienSpecialWidth, AlienSpecialHeight } from '../../constants/Sizes';
 
 class Alien { // Abstract
     constructor( ctx ) {
@@ -12,8 +13,8 @@ class Alien { // Abstract
         this.spriteClass = function(){};
     }
 
-    attachSprite( spriteClass ) {
-        this.sprite = new spriteClass( this.ctx, AlienWidth, AlienHeight );
+    attachSprite( spriteClass, width = AlienWidth, height = AlienHeight ) {
+        this.sprite = new spriteClass( this.ctx, width, height );
     }
 
     setPosition( x, y ) {
@@ -58,5 +59,13 @@ export class AlienLow extends Alien {
         super( ...args );
 
         this.attachSprite( AlienLowSprite );
+    }
+}
+
+export class AlienSpecial extends Alien {
+    constructor( ...args ) {
+        super( ...args );
+
+        this.attachSprite( AlienSpecialSprite, AlienSpecialWidth, AlienSpecialHeight );
     }
 }

@@ -1,10 +1,17 @@
 import { Sprite } from './Sprite';
 import { AlienSpecialColor } from '../constants/Colors';
 
-export default class AlienSpecial extends Sprite {
-    width = 48;
-    height = 21;
-    color = AlienSpecialColor;
+export default class AlienSpecialSprite extends Sprite {
+    constructor( ...args ) {
+        super( ...args );
+
+        this.id     = 'AlienSpecialSprite';
+        this.width  = 48;
+        this.height = 21;
+        this.color  = AlienSpecialColor;
+
+        this.afterProps();
+    }
 
     draw( ctx ) {
         ctx .fR( 15, 0, 18, 3 )

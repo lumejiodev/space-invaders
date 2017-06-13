@@ -1,6 +1,7 @@
 import Element from './Element';
-import { AlienLow, AlienMiddle, AlienHigh } from './partials/Aliens';
-import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition } from '../constants/Sizes';
+import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
+import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition } from '../constants/Sizes';
+import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
 export default class Enemies extends Element {
     constructor( ...args ) {
@@ -8,6 +9,12 @@ export default class Enemies extends Element {
 
         this.setRows( 5 );
         this.setColumns( 11 );
+
+        this.position = (FieldWidth - this.rowWidth) / 2;
+        this.level = 0;
+        this.speed = 20/1000;
+        this.directionRight = true;
+        this.moveTimestamp = Date.now();
 
         this.aliens = [];
         for (let i = 0; i < this.COLUMNS; i++) {
@@ -18,11 +25,31 @@ export default class Enemies extends Element {
             }
         }
 
-        this.position = (FieldWidth - this.rowWidth) / 2;
-        this.level = 0;
-        this.speed = 20/1000;
-        this.directionRight = true;
-        this.moveTimestamp = Date.now();
+        this.alienSpecial = {
+            alien: new AlienSpecial( this.ctx ),
+            exists: false,
+            position: 0,
+            directionRight: true,
+            timer: null,
+            speed: 60/1000,
+            getDelay() {
+                return AlienSpecialMinDelay + Math.random() * (AlienSpecialMaxDelay - AlienSpecialMinDelay);
+            },
+            queueFly() {
+                clearTimeout( this.timer );
+                this.timer = setTimeout( () => this.startFly(), this.getDelay() );
+            },
+            startFly() {
+                this.exists = true;
+                this.directionRight = Math.random() > 0.5;
+                this.position = this.directionRight ? -AlienSpecialWidth : FieldWidth;
+            },
+            stopFly() {
+                this.exists = false;
+                this.queueFly();
+            }
+        };
+        this.alienSpecial.queueFly();
     }
 
     setRows( number ) {
@@ -54,6 +81,15 @@ export default class Enemies extends Element {
             this.position = 0;
             this.levelUp();
         }
+
+        const special = this.alienSpecial;
+        if (special.exists && special.alien.alive) {
+            special.position += timeSpend * (special.directionRight ? special.speed : -special.speed );
+
+            if (special.position < -AlienSpecialWidth || special.position > FieldWidth) {
+                special.stopFly();
+            }
+        }
     }
 
     updateAliens() {
@@ -66,6 +102,11 @@ export default class Enemies extends Element {
                     this.aliens[i][j].setPosition( baseX + i*spaceWidth, baseY + j*spaceHeight );
                 }
             }
+        }
+
+        const special = this.alienSpecial;
+        if (special.exists && special.alien.alive) {
+            special.alien.setPosition( special.position, AlienSpecialPosition );
         }
     }
 
@@ -165,6 +206,10 @@ export default class Enemies extends Element {
                     this.aliens[i][j].render();
                 }
             }
+        }
+
+        if (this.alienSpecial.exists) {
+            this.alienSpecial.alien.render();
         }
     }
 }
