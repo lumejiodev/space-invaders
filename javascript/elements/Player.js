@@ -1,6 +1,7 @@
 import Element from './Element';
 import PlayerSprite from '../sprites/Player';
 import PlayerBullet from './partials/PlayerBullet';
+import SoundPlayer from '../sounds/SoundPlayer';
 import { easeOutCirc } from '../utils/easings';
 import { FrameWidth, FieldWidth, PlayerTopPosition } from '../constants/Sizes';
 import { KeyLeft, KeyRight, KeySpace } from '../constants/Keys';
@@ -75,6 +76,7 @@ export default class Player extends Element {
             this.explodeStamp = Date.now();
         clearTimeout( this.moveTimer );
         setTimeout( () => { this.exploding = false }, PlayerExplosionTime );
+        SoundPlayer.play( 'explosion' );
     }
 
     get position() {

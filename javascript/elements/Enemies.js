@@ -1,6 +1,7 @@
 import Element from './Element';
 import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
 import AlienBullet from './partials/AlienBullet';
+import SoundPlayer from '../sounds/SoundPlayer';
 import { FrameWidth, FieldWidth, FieldHeight, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth } from '../constants/Sizes';
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
@@ -48,6 +49,7 @@ export default class Enemies extends Element {
                 this.alien.alive = true;
                 this.directionRight = Math.random() > 0.5;
                 this.position = this.directionRight ? -AlienSpecialWidth : FieldWidth;
+                SoundPlayer.play( 'ufo' );
             },
             stopFly() {
                 this.exists = false;
@@ -55,6 +57,7 @@ export default class Enemies extends Element {
             },
             destroy() {
                 this.alien.destroy( () => this.stopFly() );
+                SoundPlayer.play( 'killed' );
             }
         };
         this.alienSpecial.queueFly();
@@ -186,6 +189,8 @@ export default class Enemies extends Element {
                 columnRemoved = true;
             }
         }
+
+        SoundPlayer.play( 'killed' );
     }
 
     watchPlayerBullet() {

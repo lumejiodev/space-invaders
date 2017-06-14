@@ -1,5 +1,6 @@
 import { PlayerBulletColor } from '../../constants/Colors';
 import { PlayerBulletWidth, PlayerBulletHeight } from '../../constants/Sizes';
+import SoundPlayer from '../../sounds/SoundPlayer';
 
 export default function PlayerBullet( position, topAnchor ) {
     const topPosition = topAnchor - PlayerBulletHeight;
@@ -7,6 +8,8 @@ export default function PlayerBullet( position, topAnchor ) {
 
     this.positionX = position;
     this.positionY = topPosition;
+
+    SoundPlayer.play( 'fire' );
 
     this.destroy = function() {
         this.alive = false;

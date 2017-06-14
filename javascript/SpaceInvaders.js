@@ -1,5 +1,6 @@
 import { CanvasWidth, CanvasHeight } from './constants/Sizes';
 import requestAnimationFrame from './utils/requestAnimationFrame';
+import SoundPlayer from './sounds/SoundPlayer';
 
 import Background from './elements/Background';
 import Player from './elements/Player';
@@ -11,6 +12,7 @@ export default class SpaceInvaders {
     constructor( canvas ) {
         this.canvas = canvas;
         this.initCanvasSizes();
+        this.initSounds();
         this.initGame();
     }
 
@@ -23,6 +25,13 @@ export default class SpaceInvaders {
         this.canvas.setDimensions( CanvasWidth, CanvasHeight, false, true );
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmooth( false );
+    }
+
+    initSounds() {
+        SoundPlayer.load( 'fire' );
+        SoundPlayer.load( 'killed' );
+        SoundPlayer.load( 'explosion' );
+        SoundPlayer.load( 'ufo' );
     }
 
     initGame() {
