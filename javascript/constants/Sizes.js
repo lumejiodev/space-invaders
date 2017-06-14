@@ -26,3 +26,5 @@ export const AlienSpecialPosition = 20;
 
 export const AlienBulletWidth = 4;
 export const AlienBulletHeight = 15;
+
+export const ScoreOffset = 18;

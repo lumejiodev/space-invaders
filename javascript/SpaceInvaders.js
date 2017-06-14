@@ -29,6 +29,7 @@ export default class SpaceInvaders {
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmooth( false );
         this.ctx.font = '16px ' + FontFamily;
+        this.ctx.textBaseline = 'top';
     }
 
     initSounds() {
