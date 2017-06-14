@@ -32,6 +32,8 @@ export default class Player extends Element {
 
     initUserControl() {
         // todo Вынести обработку пользовательских действий в отдельный класс
+
+        // Клавиатурное управление
         this.moveTimer = null;
         this.moveDirection = false;
         window.addEventListener( 'keydown', e => {
@@ -52,6 +54,55 @@ export default class Player extends Element {
                 // ничего не делать
             } else if (e.keyCode === this.moveDirection) {
                 this.moveDirection = false;
+            }
+        });
+
+        // Управление тачем
+        const forEach = [].forEach;
+        let touchControl = this.touch = {
+            control: false,
+            fault: 40,
+            indetifier: 0,
+            checkTouchOnPlayer: touch => {
+                if (touchControl.control) return false;
+                return  touch.clientY + window.scrollY  > this.topPosition - touchControl.fault &&
+                        touch.clientY + window.scrollY  < this.topPosition + this.spriteHeight + touchControl.fault &&
+                        touch.clientX                   > this.position - touchControl.fault &&
+                        touch.clientX                   < this.position + this.spriteWidth + touchControl.fault;
+            },
+            checkTouchOnField: touch => {
+                return touch.clientY + window.scrollY < this.topPosition - touchControl.fault;
+            }
+        };
+        this.root.canvas.addEventListener( 'touchstart', e => {
+            forEach.call( e.changedTouches, touch => {
+                if (touchControl.checkTouchOnPlayer( touch )) {
+                    clearTimeout( this.moveTimer );
+                    touchControl.control = true;
+                    touchControl.indetifier = touch.identifier;
+                    e.preventDefault();
+                } else if (touchControl.checkTouchOnField( touch )) {
+                    this.fire();
+                }
+            });
+        });
+        this.root.canvas.addEventListener( 'touchmove', e => {
+            if (!this.exploding && touchControl.control) {
+                forEach.call( e.changedTouches, touch => {
+                    this.pos = (touch.clientX - 5) / FieldWidth;
+                    this.pos = Math.max( 0, Math.min( 1, this.pos ))
+                    e.preventDefault();
+                });
+            }
+        });
+        window.addEventListener( 'touchend', e => {
+            if (touchControl.control) {
+                forEach.call( e.changedTouches, touch => {
+                    if (touchControl.indetifier === touch.identifier) {
+                        touchControl.control = false;
+                        e.preventDefault();
+                    }
+                });
             }
         });
     }
