@@ -129,7 +129,13 @@ export default class Player extends Element {
         this.root.score.minusLife();
 
         clearTimeout( this.moveTimer );
-        setTimeout( () => { this.exploding = false }, PlayerExplosionTime );
+        setTimeout( () => {
+            if (this.root.score.totalLives === 0) {
+                this.root.endGame();
+            } else {
+                this.exploding = false
+            }
+        }, PlayerExplosionTime );
 
         SoundPlayer.play( 'explosion' );
     }

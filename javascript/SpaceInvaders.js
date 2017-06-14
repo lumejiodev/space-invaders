@@ -8,6 +8,7 @@ import Player from './elements/Player';
 import Enemies from './elements/Enemies';
 import Frame from './elements/Frame';
 import Score from './elements/Score';
+import GameOverScreen from './elements/GameOver';
 
 export default class SpaceInvaders {
     elements = [];
@@ -45,7 +46,13 @@ export default class SpaceInvaders {
         this.addElement( Enemies );
         this.addElement( Frame );
         this.addElement( Score );
+        this.running = true;
         requestAnimationFrame( this.renderFrame );
+    }
+
+    endGame() {
+        this.addElement( GameOverScreen );
+        this.running = false;
     }
 
     addElement( Element ) {
@@ -64,6 +71,9 @@ export default class SpaceInvaders {
         this.ctx.clearCanvas();
         this.updatePositions();
         this.renderElements();
-        requestAnimationFrame( this.renderFrame );
+
+        if (this.running) {
+            requestAnimationFrame( this.renderFrame );
+        }
     };
 }
