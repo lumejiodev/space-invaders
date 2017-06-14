@@ -1,8 +1,10 @@
 import Element from './Element';
 import PlayerSprite from '../sprites/Player';
 import PlayerBullet from './partials/PlayerBullet';
+import { easeOutCirc } from '../utils/easings';
 import { FrameWidth, FieldWidth, PlayerTopPosition } from '../constants/Sizes';
 import { KeyLeft, KeyRight, KeySpace } from '../constants/Keys';
+import { PlayerExplosionTime } from '../constants/Time';
 
 export default class Player extends Element {
     constructor( ...args ) {
@@ -12,6 +14,9 @@ export default class Player extends Element {
         this.step = 0.01;
         this.stepInterval = 16;
         this.maxPos = FieldWidth - this.spriteWidth;
+
+        this.exploding = false;
+        this.explodeStamp = Date.now();
 
         PlayerBullet.prototype.ctx = this.ctx;
 
@@ -29,7 +34,9 @@ export default class Player extends Element {
         this.moveTimer = null;
         this.moveDirection = false;
         window.addEventListener( 'keydown', e => {
-            if (e.keyCode === KeyLeft || e.keyCode === KeyRight) {
+            if (this.exploding) {
+                // ничего не делать
+            } else if (e.keyCode === KeyLeft || e.keyCode === KeyRight) {
                 if (e.keyCode !== this.moveDirection) {
                     clearTimeout( this.moveTimer );
                     this.moveDirection = e.keyCode;
@@ -40,7 +47,9 @@ export default class Player extends Element {
             }
         });
         window.addEventListener( 'keyup', e => {
-            if (e.keyCode === this.moveDirection) {
+            if (this.exploding) {
+                // ничего не делать
+            } else if (e.keyCode === this.moveDirection) {
                 this.moveDirection = false;
             }
         });
@@ -58,6 +67,14 @@ export default class Player extends Element {
         if (this.bullet && this.bullet.alive) return;
 
         this.bullet = new PlayerBullet( this.position + this.spriteWidth/2, this.topPosition );
+    }
+
+    explode() {
+        if (this.exploding) return;
+            this.exploding = true;
+            this.explodeStamp = Date.now();
+        clearTimeout( this.moveTimer );
+        setTimeout( () => { this.exploding = false }, PlayerExplosionTime );
     }
 
     get position() {
@@ -80,18 +97,38 @@ export default class Player extends Element {
         const { alienBullets } = this.root;
         if (alienBullets && alienBullets.length) {
             alienBullets.forEach( bullet => {
-                if (bullet.positionY + bullet.height > this.topPosition &&
+                if (bullet.alive &&
+                    bullet.positionY + bullet.height > this.topPosition &&
                     bullet.positionY < this.topPosition + this.spriteHeight &&
                     bullet.positionX > this.position &&
                     bullet.positionX < this.position + this.spriteWidth) {
                     alienBullets.destroy( bullet );
+                    this.explode();
                 }
             });
         }
     }
 
-    render() {
+    renderExplosion() {
+        let { ctx } = this;
+        let [ transX, transY ] = [ this.position + this.spriteWidth/2, this.topPosition + this.spriteHeight/2 ];
+        let pos = (Date.now() - this.explodeStamp) / PlayerExplosionTime;
+
+        ctx.save();
+        ctx .trans( transX, transY )
+            .scaleBoth( easeOutCirc( pos, 1, -1, 1 ) )
+            .trans( -transX, -transY )
+            .globalAlpha = 1 - pos;
         this.sprite.renderAt( this.position, this.topPosition );
+        ctx.restore();
+    }
+
+    render() {
+        if (this.exploding) {
+            this.renderExplosion();
+        } else {
+            this.sprite.renderAt( this.position, this.topPosition );
+        }
 
         if (this.bullet && this.bullet.alive) {
             this.bullet.render();

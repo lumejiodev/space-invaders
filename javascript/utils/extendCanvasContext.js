@@ -38,6 +38,11 @@ CanvasContextProto.trans = function( x, y ) {
     return this;
 };
 
+CanvasContextProto.scaleBoth = function( x ) {
+    this.scale( x, x );
+    return this;
+};
+
 CanvasContextProto.bezier = function( x1, y1, x2, y2, x, y ) {
     this.bezierCurveTo( x1, y1, x2, y2, x, y );
     return this;
