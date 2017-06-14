@@ -1,7 +1,7 @@
 import Element from './Element';
 import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
 import AlienBullet from './partials/AlienBullet';
-import { FrameWidth, FieldWidth, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth } from '../constants/Sizes';
+import { FrameWidth, FieldWidth, FieldHeight, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth } from '../constants/Sizes';
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
 export default class Enemies extends Element {
@@ -26,7 +26,8 @@ export default class Enemies extends Element {
             }
         }
 
-        this.alienBullets = [];
+        this.alienBullets = this.root.alienBullets = [];
+        this.alienBullets.destroy = ::this.destroyBullet;
 
         this.alienSpecial = {
             alien: new AlienSpecial( this.ctx ),
@@ -98,9 +99,13 @@ export default class Enemies extends Element {
             }
         }
 
-        this.alienBullets.forEach( bullet => {
+        this.alienBullets.forEach( (bullet, index) => {
             if (bullet && bullet.alive) {
                 bullet.positionY += timeSpend * bullet.speed;
+
+                if (bullet.positionY > FieldHeight) {
+                    this.destroyBullet( bullet );
+                }
             }
         });
     }
@@ -143,6 +148,14 @@ export default class Enemies extends Element {
             let bulletX = Math.round( baseX + chosenAlien.column*spaceWidth + AlienWidth/2 - AlienBulletWidth/2 );
             let bulletY = baseY + chosenAlien.row*spaceHeight + AlienHeight;
             this.alienBullets.push( new AlienBullet( this.ctx, bulletX, bulletY, this.speed*2 ) );
+        }
+    }
+
+    destroyBullet( bullet ) {
+        let index = this.alienBullets.indexOf( bullet );
+        if (index !== -1) {
+            bullet.alive = false;
+            delete this.alienBullets[bullet];
         }
     }
 

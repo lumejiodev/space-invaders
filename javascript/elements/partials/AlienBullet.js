@@ -8,8 +8,11 @@ export default class AlienBullet {
         this.positionY = y;
         this.speed = speed;
 
+        this.width = AlienBulletWidth;
+        this.height = AlienBulletHeight;
+
         this.alive = true;
-        this.sprite = new AlienBulletSprite( ctx, AlienBulletWidth, AlienBulletHeight );
+        this.sprite = new AlienBulletSprite( ctx, this.width, this.height );
         this.sprite.stateTick = 300;
     }
 

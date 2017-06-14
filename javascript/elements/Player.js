@@ -76,6 +76,18 @@ export default class Player extends Element {
         } else {
             root.playerBullet = null;
         }
+
+        const { alienBullets } = this.root;
+        if (alienBullets && alienBullets.length) {
+            alienBullets.forEach( bullet => {
+                if (bullet.positionY + bullet.height > this.topPosition &&
+                    bullet.positionY < this.topPosition + this.spriteHeight &&
+                    bullet.positionX > this.position &&
+                    bullet.positionX < this.position + this.spriteWidth) {
+                    alienBullets.destroy( bullet );
+                }
+            });
+        }
     }
 
     render() {
