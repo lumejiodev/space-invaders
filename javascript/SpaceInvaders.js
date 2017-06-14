@@ -7,6 +7,7 @@ import Background from './elements/Background';
 import Player from './elements/Player';
 import Enemies from './elements/Enemies';
 import Frame from './elements/Frame';
+import Score from './elements/Score';
 
 export default class SpaceInvaders {
     elements = [];
@@ -42,6 +43,7 @@ export default class SpaceInvaders {
         this.addElement( Player );
         this.addElement( Enemies );
         this.addElement( Frame );
+        this.addElement( Score );
         requestAnimationFrame( this.renderFrame );
     }
 

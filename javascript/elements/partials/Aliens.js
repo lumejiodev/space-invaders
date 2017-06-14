@@ -32,6 +32,10 @@ class Alien { // Abstract
         setTimeout( callback, AlienDyingTime );
     }
 
+    get value() {
+        return 0;
+    }
+
     render() {
         if (this.alive) {
             this.sprite.fitRenderAt( this.positionX, this.positionY );
@@ -53,6 +57,10 @@ export class AlienHigh extends Alien {
 
         this.attachSprite( AlienHighSprite );
     }
+
+    get value() {
+        return 40;
+    }
 }
 
 export class AlienMiddle extends Alien {
@@ -60,6 +68,10 @@ export class AlienMiddle extends Alien {
         super( ...args );
 
         this.attachSprite( AlienMiddleSprite );
+    }
+
+    get value() {
+        return 20;
     }
 }
 
@@ -69,6 +81,10 @@ export class AlienLow extends Alien {
 
         this.attachSprite( AlienLowSprite );
     }
+
+    get value() {
+        return 10;
+    }
 }
 
 export class AlienSpecial extends Alien {
@@ -76,5 +92,9 @@ export class AlienSpecial extends Alien {
         super( ...args );
 
         this.attachSprite( AlienSpecialSprite, AlienSpecialWidth, AlienSpecialHeight );
+    }
+
+    get value() {
+        return Math.round( 1 + Math.random() * 2 ) * 50;
     }
 }

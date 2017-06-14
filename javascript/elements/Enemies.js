@@ -6,8 +6,8 @@ import { FrameWidth, FieldWidth, FieldHeight, AlienWidth, AlienHeight, AlienOffs
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
 export default class Enemies extends Element {
-    constructor( ...args ) {
-        super( ...args );
+    constructor( root ) {
+        super( root );
 
         this.setRows( 5 );
         this.setColumns( 11 );
@@ -56,6 +56,7 @@ export default class Enemies extends Element {
                 this.queueFly();
             },
             destroy() {
+                root.score.addPoints( this.alien.value );
                 this.alien.destroy( () => this.stopFly() );
                 SoundPlayer.play( 'killed' );
             }
@@ -163,6 +164,8 @@ export default class Enemies extends Element {
     }
 
     destroyAlien( column, row ) {
+        this.root.score.addPoints( this.aliens[column][row].value );
+
         let columnRemoved = false;
 
         this.aliens[column][row].destroy( () => {
