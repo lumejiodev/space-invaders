@@ -6,6 +6,7 @@ import SoundPlayer from './sounds/SoundPlayer';
 import Background from './elements/Background';
 import Player from './elements/Player';
 import Enemies from './elements/Enemies';
+import Frame from './elements/Frame';
 
 export default class SpaceInvaders {
     elements = [];
@@ -40,6 +41,7 @@ export default class SpaceInvaders {
         this.addElement( Background );
         this.addElement( Player );
         this.addElement( Enemies );
+        this.addElement( Frame );
         requestAnimationFrame( this.renderFrame );
     }
 
