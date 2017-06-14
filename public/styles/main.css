@@ -8,6 +8,17 @@ body {
     margin: 0 auto;
 }
 
+
+/* Helpers */
+
+html:not(.has-touchscreen) .only-touchscreen,
+html.has-touchscreen .no-touchscreen {
+    display: none;
+}
+
+
+/* Start screen styles */
+
 .start-screen {
     display: flex;
     flex-direction: column;
@@ -26,6 +37,7 @@ body {
 
 .start-screen__text {
     width: 400px;
+    line-height: 1.8;
     text-align: left;
     white-space: pre-wrap;
 }
