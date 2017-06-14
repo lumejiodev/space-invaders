@@ -9,5 +9,7 @@ export default class Element {
 
     update() {}
 
+    unload() {}
+
     render() {}
 }

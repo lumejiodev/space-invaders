@@ -4,6 +4,25 @@ import { GameOverColor, BackgroundColor, ScorePoints } from '../constants/Colors
 import { FontSize, FontSizeSmall, FontFamily } from '../constants/Typography';
 
 export default class GameOverScreen extends Element {
+    constructor( root ) {
+        super( root );
+
+        this.root.canvas.addEventListener( 'mousedown', this.clickHandle.bind( this ) );
+        this.root.canvas.addEventListener( 'touchstart', this.clickHandle.bind( this ) );
+    }
+
+    clickHandle( e ) {
+        let canvasRect = this.root.canvas.getBoundingClientRect();
+        let [ pointerX, pointerY ] = [ e.pageX - canvasRect.left, e.pageY - canvasRect.top ];
+
+        if (pointerX > GameOverLeft &&
+            pointerX < GameOverLeft + GameOverWidth &&
+            pointerY > GameOverTop &&
+            pointerY < GameOverTop + GameOverHeight) {
+            this.root.restartGame();
+        }
+    }
+
     getTop( pos ) {
         return GameOverTop + GameOverHeight * pos;
     }
@@ -29,5 +48,10 @@ export default class GameOverScreen extends Element {
             .style( GameOverColor ).text( 'чтобы попробовать заново', center, this.getTop( 0.8 ) );
 
         this.ctx.restore();
+    }
+
+    unload() {
+        this.root.canvas.removeEventListener( 'mousedown', this.clickHandle );
+        this.root.canvas.removeEventListener( 'touchstart', this.clickHandle );
     }
 }

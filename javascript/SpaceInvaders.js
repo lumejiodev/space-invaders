@@ -50,6 +50,11 @@ export default class SpaceInvaders {
         requestAnimationFrame( this.renderFrame );
     }
 
+    restartGame() {
+        this.elements = [];
+        this.initGame();
+    }
+
     endGame() {
         this.addElement( GameOverScreen );
         this.running = false;

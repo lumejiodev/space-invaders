@@ -36,30 +36,11 @@ export default class Player extends Element {
         // Клавиатурное управление
         this.moveTimer = null;
         this.moveDirection = false;
-        window.addEventListener( 'keydown', e => {
-            if (this.exploding) {
-                // ничего не делать
-            } else if (e.keyCode === KeyLeft || e.keyCode === KeyRight) {
-                if (e.keyCode !== this.moveDirection) {
-                    clearTimeout( this.moveTimer );
-                    this.moveDirection = e.keyCode;
-                    this.positionStep();
-                }
-            } else if (e.keyCode === KeySpace) {
-                this.fire();
-            }
-        });
-        window.addEventListener( 'keyup', e => {
-            if (this.exploding) {
-                // ничего не делать
-            } else if (e.keyCode === this.moveDirection) {
-                this.moveDirection = false;
-            }
-        });
+        window.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
+        window.addEventListener( 'keyup', this.handleKeyUp.bind( this ) );
 
         // Управление тачем
-        const forEach = [].forEach;
-        let touchControl = this.touch = {
+        this.touchControl = {
             control: false,
             fault: 40,
             indetifier: 0,
@@ -74,37 +55,72 @@ export default class Player extends Element {
                 return touch.clientY + window.scrollY < this.topPosition - touchControl.fault;
             }
         };
-        this.root.canvas.addEventListener( 'touchstart', e => {
+
+        this.root.canvas.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+        this.root.canvas.addEventListener( 'touchmove', this.handleTouchMove.bind( this ) );
+        window.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+    }
+
+    handleKeyDown( e ) {
+        if (this.exploding) {
+            // ничего не делать
+        } else if (e.keyCode === KeyLeft || e.keyCode === KeyRight) {
+            if (e.keyCode !== this.moveDirection) {
+                clearTimeout( this.moveTimer );
+                this.moveDirection = e.keyCode;
+                this.positionStep();
+            }
+        } else if (e.keyCode === KeySpace) {
+            this.fire();
+        }
+    }
+
+    handleKeyUp( e ) {
+        if (this.exploding) {
+            // ничего не делать
+        } else if (e.keyCode === this.moveDirection) {
+            this.moveDirection = false;
+        }
+    }
+
+    handleTouchStart( e ) {
+        const forEach = [].forEach;
+        let touchControl = this.touchControl;
+        forEach.call( e.changedTouches, touch => {
+            if (touchControl.checkTouchOnPlayer( touch )) {
+                clearTimeout( this.moveTimer );
+                touchControl.control = true;
+                touchControl.indetifier = touch.identifier;
+                e.preventDefault();
+            } else if (touchControl.checkTouchOnField( touch )) {
+                this.fire();
+            }
+        });
+    }
+
+    handleTouchMove( e ) {
+        const forEach = [].forEach;
+        let touchControl = this.touchControl;
+        if (!this.exploding && touchControl.control) {
             forEach.call( e.changedTouches, touch => {
-                if (touchControl.checkTouchOnPlayer( touch )) {
-                    clearTimeout( this.moveTimer );
-                    touchControl.control = true;
-                    touchControl.indetifier = touch.identifier;
+                this.pos = (touch.clientX - 5) / FieldWidth;
+                this.pos = Math.max( 0, Math.min( 1, this.pos ))
+                e.preventDefault();
+            });
+        }
+    }
+
+    handleTouchEnd( e ) {
+        const forEach = [].forEach;
+        let touchControl = this.touchControl;
+        if (touchControl.control) {
+            forEach.call( e.changedTouches, touch => {
+                if (touchControl.indetifier === touch.identifier) {
+                    touchControl.control = false;
                     e.preventDefault();
-                } else if (touchControl.checkTouchOnField( touch )) {
-                    this.fire();
                 }
             });
-        });
-        this.root.canvas.addEventListener( 'touchmove', e => {
-            if (!this.exploding && touchControl.control) {
-                forEach.call( e.changedTouches, touch => {
-                    this.pos = (touch.clientX - 5) / FieldWidth;
-                    this.pos = Math.max( 0, Math.min( 1, this.pos ))
-                    e.preventDefault();
-                });
-            }
-        });
-        window.addEventListener( 'touchend', e => {
-            if (touchControl.control) {
-                forEach.call( e.changedTouches, touch => {
-                    if (touchControl.indetifier === touch.identifier) {
-                        touchControl.control = false;
-                        e.preventDefault();
-                    }
-                });
-            }
-        });
+        }
     }
 
     positionStep() {
@@ -196,5 +212,13 @@ export default class Player extends Element {
         if (this.bullet && this.bullet.alive) {
             this.bullet.render();
         }
+    }
+
+    unload() {
+        window.removeEventListener( 'keydown', this.handleKeyDown );
+        window.removeEventListener( 'keyup', this.handleKeyDown );
+        window.removeEventListener( 'touchend', this.handleTouchEnd );
+        this.root.canvas.removeEventListener( 'touchstart', this.handleTouchStart );
+        this.root.canvas.removeEventListener( 'touchmove', this.handleTouchMove );
     }
 }
