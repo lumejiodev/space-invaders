@@ -28,3 +28,8 @@ export const AlienBulletWidth = 4;
 export const AlienBulletHeight = 15;
 
 export const ScoreOffset = 18;
+
+export const GameOverWidth = 400;
+export const GameOverHeight = 300;
+export const GameOverTop = Math.round( CanvasHeight - GameOverHeight ) / 3;
+export const GameOverLeft = Math.round( CanvasWidth - GameOverWidth ) / 2;

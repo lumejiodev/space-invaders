@@ -7,3 +7,5 @@ export const AlienSpecialColor = '#ff4747';
 export const ScoreText = 'white';
 export const ScorePoints = 'red';
 export const ScoreLives = 'yellow';
+
+export const GameOverColor = 'white';
