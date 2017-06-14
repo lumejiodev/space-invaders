@@ -23,6 +23,11 @@ export default class Score extends Element {
         this.totalLives--;
     }
 
+    minusAllLives() {
+        this.totalLives = 1;
+        this.minusLife();
+    }
+
     measureText( text ) {
         return this.ctx.measureText( text ).width;
     }

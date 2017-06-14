@@ -2,7 +2,8 @@ import Element from './Element';
 import { AlienLow, AlienMiddle, AlienHigh, AlienSpecial } from './partials/Aliens';
 import AlienBullet from './partials/AlienBullet';
 import SoundPlayer from '../sounds/SoundPlayer';
-import { FrameWidth, FieldWidth, FieldHeight, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth, AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth } from '../constants/Sizes';
+import { FrameWidth, FieldWidth, FieldHeight, AlienWidth, AlienHeight, AlienOffset, AlienStartPosition, AlienSpecialWidth,
+         AlienSpecialHeight, AlienSpecialPosition, AlienBulletWidth, PlayerTopPosition } from '../constants/Sizes';
 import { AlienSpecialMinDelay, AlienSpecialMaxDelay } from '../constants/Time';
 
 export default class Enemies extends Element {
@@ -78,6 +79,10 @@ export default class Enemies extends Element {
         this.level += AlienHeight * 0.7;
         this.speed += 20/1000;
         this.directionRight = !this.directionRight;
+
+        if (AlienStartPosition + AlienOffset + this.columnHeight + this.level > PlayerTopPosition) {
+            this.root.score.minusAllLives();
+        }
     }
 
     updatePosition() {
@@ -166,16 +171,15 @@ export default class Enemies extends Element {
     destroyAlien( column, row ) {
         this.root.score.addPoints( this.aliens[column][row].value );
 
-        let columnRemoved = false;
+        let rowOrColumnRemoved = false;
 
         this.aliens[column][row].destroy( () => {
-            if (!columnRemoved) {
+            if (!rowOrColumnRemoved) {
                 delete this.aliens[column][row];
             }
         });
 
         // обновить данные, если крайних столбцов стало меньше
-        // todo сделать аналогичное с рядами
         if (column === 0 || column === this.COLUMNS - 1) {
             for (let j = 0; j < this.ROWS; j++) {
                 if (this.aliens[column][j] && this.aliens[column][j].alive) break;
@@ -189,7 +193,25 @@ export default class Enemies extends Element {
                 }
 
                 this.setColumns( this.COLUMNS - 1 );
-                columnRemoved = true;
+                rowOrColumnRemoved = true;
+            }
+        }
+
+        // обновить данные, если крайних рядов стало меньше
+        if (row === 0 || row === this.ROWS - 1) {
+            for (let i = 0; i < this.COLUMNS; i++) {
+                if (this.aliens[i][row] && this.aliens[i][row].alive) break;
+                if (i !== this.COLUMNS - 1) continue;
+
+                if (row === 0) { // редкий случай, но всё возможно
+                    this.aliens.forEach( column => column.splice( 0, 1 ) );
+                    this.level += AlienHeight + AlienOffset;
+                } else {
+                    this.aliens.forEach( column => column.splice( -1, 1 ) );
+                }
+
+                this.setRows( this.ROWS - 1 );
+                rowOrColumnRemoved = true;
             }
         }
 
