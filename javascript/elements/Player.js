@@ -125,8 +125,12 @@ export default class Player extends Element {
         if (this.exploding) return;
             this.exploding = true;
             this.explodeStamp = Date.now();
+
+        this.root.score.minusLife();
+
         clearTimeout( this.moveTimer );
         setTimeout( () => { this.exploding = false }, PlayerExplosionTime );
+
         SoundPlayer.play( 'explosion' );
     }
 
