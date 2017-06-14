@@ -1,8 +1,44 @@
 body {
     margin: 0;
+    font: 16px 'Press Start 2P', cursive;
 }
 
 .wrapper {
     width: 1000px;
     margin: 0 auto;
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 562px;
+    background: black;
+    color: white;
+    text-align: center;
+}
+
+.start-screen__header {
+    font-size: 1.5em;
+    letter-spacing: 5px;
+}
+
+.start-screen__text {
+    width: 400px;
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+.start-screen__button {
+    display: inline-block;
+    padding: 1em;
+    margin: 1em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.start-screen__button:hover {
+    color: #33ff00;
 }

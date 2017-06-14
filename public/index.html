@@ -10,7 +10,22 @@
 </head>
 <body>
 <div class="wrapper">
-	<canvas id="game"></canvas>
+	<div id="screen-0" class="start-screen">
+		<h1 class="start-screen__header">Космические захватчики</h1>
+		<a class="start-screen__button" rel="next">Нажмите сюда</a>
+	</div>
+
+	<div id="screen-1" class="start-screen" style="display: none;">
+		<h2 class="start-screen__header">Управление</h2>
+
+		<p class="start-screen__text">Лететь влево:  Стрелка <-</p>
+		<p class="start-screen__text">Лететь вправо: Стрелка -></p>
+		<p class="start-screen__text">Стрельба:      Пробел [_]</p>
+
+		<a class="start-screen__button" rel="start">Играть!</a>
+	</div>
+
+	<canvas id="game" style="display: none;"></canvas>
 </div>
 <script src="build/main.js"></script>
 </body>
