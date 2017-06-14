@@ -1,4 +1,5 @@
 import { CanvasWidth, CanvasHeight } from './constants/Sizes';
+import { FontFamily } from './constants/Typography';
 import requestAnimationFrame from './utils/requestAnimationFrame';
 import SoundPlayer from './sounds/SoundPlayer';
 
@@ -25,6 +26,7 @@ export default class SpaceInvaders {
         this.canvas.setDimensions( CanvasWidth, CanvasHeight, false, true );
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmooth( false );
+        this.ctx.font = '16px ' + FontFamily;
     }
 
     initSounds() {
