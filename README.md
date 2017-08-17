@@ -1,3 +1,3 @@
 # Тестовое задание по Javascript
 
-Demo: http://lumejio.ru/space-invaders/
+Demo: http://ad-web.studio/space-invaders/
